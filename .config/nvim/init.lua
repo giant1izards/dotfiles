@@ -21,9 +21,21 @@ require('nvim-treesitter').setup {
     install_dir = vim.fn.stdpath('data') .. '/site'
 }
 
+vim.api.nvim_create_autocmd({ "FileType" }, {
+    callback = function()
+        if vim.bo.filetype == "cs" then
+            vim.wo[0][0].foldmethod = "expr"
+            vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+        else
+            vim.opt.foldmethod = "syntax"
+        end
+    end
+})
+
 -- LSP
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('blink.cmp').get_lsp_capabilities()
 
 -- vim.lsp.enable('pylsp')
 vim.lsp.enable('tailwindcss')
+vim.lsp.enable('roslyn_ls')
