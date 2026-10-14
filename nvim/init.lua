@@ -4,6 +4,7 @@ vim.o.tabstop = 8
 vim.o.shiftwidth = 4
 vim.o.softtabstop = -1
 vim.o.expandtab = true
+vim.o.shell = "/usr/bin/zsh"
 
 vim.opt.completeopt = { 'menuone', 'noselect', 'popup' }
 

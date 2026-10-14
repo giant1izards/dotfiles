@@ -26,8 +26,32 @@ dap.configurations.rust = {
         end,
         cwd = '${workspaceFolder}',
         stopOnEntry = false,
+    },
+    {
+        name = "Debug Test",
+        type = "codelldb",
+        request = "launch",
+        program = function()
+            return vim.fn.input('Path to test executable: ', vim.fn.getcwd() .. '/target/debug/deps/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        args = function()
+            return coroutine.create(function(dap_run_co)
+                vim.ui.input({ prompt = 'Test name: ' }, function(choice)
+                    choice = choice or ''
+                    local arg = vim.split(choice, ' ')
+                    coroutine.resume(dap_run_co, arg)
+                end)
+            end)
+        end,
+        initCommands = {
+            "settings set target.disable-aslr false"
+        },
+        stopOnEntry = false,
+
     }
 }
+
 dap.configurations.lua = {
     {
         type = 'nlua',
